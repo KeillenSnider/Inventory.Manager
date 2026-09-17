@@ -1,45 +1,26 @@
-class Book{
+public class Book extends LibraryItem{
     //Variables
-    private int id;
-    private String title;
     private String author;
-    private boolean availability;
 
     //Constructor
     public Book(int id, String title, String author, boolean availability){
-        this.id = id;
-        this.title = title;
+        super(id, title, availability);
         this.author = author;
-        this.availability = availability;
-    }
-
-    //Getters
-    public int getId(){
-        return id;
-    }
-
-    public String getTitle(){
-        return title;
     }
 
     public String getAuthor(){
         return author;
     }
-
-    public boolean isAvailability(){
-        return availability;
-    }
-
-    //Setters
-    public void setAvailability(boolean availability){
-        this.availability = availability;
+    @Override 
+    public int getLoanPeriodDays(){
+        return 21;
     }
 
     //Display Book information
     //Use Override toString to display info without having to call a method
     @Override
     public String toString(){
-        return "_______________________________" + "\n" +"Book ID: " + id + "\n" + "Book Title: " + title + "\n" + "Book Author: " + author + "\n" + 
-        "Book Availability: " + availability + "\n" + "_______________________________";
+        return "_______________________________" + "\n" +"Book ID: " + getId() + "\n" + "Book Title: " + getTitle() + "\n" + "Book Author: " + author + "\n" + 
+        "Book Availability: " + isAvailability() + "\n" + "Book Loan Period: " + getLoanPeriodDays() + " days\n" + "_______________________________";
     }
 }

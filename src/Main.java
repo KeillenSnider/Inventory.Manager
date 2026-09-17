@@ -22,13 +22,13 @@ public class Main {
 
         while(true){
             System.out.println("Welcome to the Library Management System");
-            System.out.println("1. Add a book");
-            System.out.println("2. Remove a book");
+            System.out.println("1. Add an item");
+            System.out.println("2. Remove an item");
             System.out.println("3. Add a member");
             System.out.println("4. Remove a member");
-            System.out.println("5. Checkout a book");
-            System.out.println("6. Return a book");
-            System.out.println("7. Search for a book");
+            System.out.println("5. Checkout an item");
+            System.out.println("6. Return an item");
+            System.out.println("7. Search for an item");
             System.out.println("8. Exit");
 
             int choice = getValidInt(scanner);
@@ -36,34 +36,53 @@ public class Main {
             scanner.nextLine();
 
             if(choice == 1){
-                System.out.println("Enter book ID:");
-                int bookId = getValidInt(scanner);
+                System.out.println("What type of item? 1. Book  2. DVD");
+                int typeChoice = getValidInt(scanner);
                 scanner.nextLine();
-                System.out.println("Enter book title:");
-                String bookTitle = scanner.nextLine();
-                System.out.println("Enter book author:");
-                String bookAuthor = scanner.nextLine();
-                Book newBook = new Book(bookId, bookTitle, bookAuthor, true);
-                if(library.addBook(newBook)){
+
+                System.out.println("Enter item ID:");
+                int itemId = getValidInt(scanner);
+                scanner.nextLine();
+                System.out.println("Enter item title:");
+                String itemTitle = scanner.nextLine();
+
+                LibraryItem newItem = null;
+
+                if(typeChoice == 1){
+                    System.out.println("Enter book author:");
+                    String bookAuthor = scanner.nextLine();
+                    newItem = new Book(itemId, itemTitle, bookAuthor, true);
+                } else if(typeChoice == 2){
+                    System.out.println("Enter DVD director:");
+                    String dvdDirector = scanner.nextLine();
+                    newItem = new DVD(itemId, itemTitle, dvdDirector, true);
+                } else {
                     System.out.println("____________________________________________________");
-                    System.out.println(newBook.getTitle() + " Book added to Library.");
+                    System.out.println("Invalid item type. Item not added.");
+                    System.out.println("____________________________________________________");
+                    continue;
+                }
+
+                if(library.addItem(newItem)){
+                    System.out.println("____________________________________________________");
+                    System.out.println(newItem.getTitle() + " added to Library.");
                     System.out.println("____________________________________________________");
                 }
             }
             else if(choice == 2){
-                System.out.println("Enter book ID to remove:");
-                int bookId = getValidInt(scanner);
+                System.out.println("Enter item ID to remove:");
+                int itemId = getValidInt(scanner);
                 scanner.nextLine();
-                Book book = library.getBookById(bookId);
-                if(book != null){
-                    if(library.removeBook(book)){
+                LibraryItem item = library.getItemById(itemId);
+                if(item != null){
+                    if(library.removeItem(item)){
                         System.out.println("____________________________________________________");
-                        System.out.println(book + " Book removed from Library.");
+                        System.out.println(item + " removed from Library.");
                         System.out.println("____________________________________________________");
                     }
                 } else {
                     System.out.println("____________________________________________________");
-                    System.out.println("Book not found.");
+                    System.out.println("Item not found.");
                     System.out.println("____________________________________________________");
                 }
             }
@@ -101,20 +120,20 @@ public class Main {
                 System.out.println("Enter member ID:");
                 int memberId = getValidInt(scanner);
                 scanner.nextLine();
-                System.out.println("Enter book ID to checkout:");
-                int bookId = getValidInt(scanner);
+                System.out.println("Enter item ID to checkout:");
+                int itemId = getValidInt(scanner);
                 scanner.nextLine();
                 Member member = library.getMemberById(memberId);
-                Book book = library.getBookById(bookId);
-                if(member != null && book != null){
-                    if(library.checkOutBook(member, book)){
+                LibraryItem item = library.getItemById(itemId);
+                if(member != null && item != null){
+                    if(library.checkOutItem(member, item)){
                         System.out.println("____________________________________________________");
-                        System.out.println(member.getName() + " has checked out " + book.getTitle());
+                        System.out.println(member.getName() + " has checked out " + item.getTitle());
                         System.out.println("____________________________________________________");
                     }
                 } else {
                     System.out.println("____________________________________________________");
-                    System.out.println("Member or book not found.");
+                    System.out.println("Member or item not found.");
                     System.out.println("____________________________________________________");
                 }
             }
@@ -122,36 +141,36 @@ public class Main {
                 System.out.println("Enter member ID:");
                 int memberId = getValidInt(scanner);
                 scanner.nextLine();
-                System.out.println("Enter book ID to return:");
-                int bookId = getValidInt(scanner);
+                System.out.println("Enter item ID to return:");
+                int itemId = getValidInt(scanner);
                 scanner.nextLine();
                 Member member = library.getMemberById(memberId);
-                Book book = library.getBookById(bookId);
-                if(member != null && book != null){
-                    if(library.returnBook(member, book)){
+                LibraryItem item = library.getItemById(itemId);
+                if(member != null && item != null){
+                    if(library.returnItem(member, item)){
                         System.out.println("____________________________________________________");
-                        System.out.println(member.getName() + " has returned " + book.getTitle());
+                        System.out.println(member.getName() + " has returned " + item.getTitle());
                         System.out.println("____________________________________________________");
                     }
                 } else {
                     System.out.println("____________________________________________________");
-                    System.out.println("Member or book not found.");
+                    System.out.println("Member or item not found.");
                     System.out.println("____________________________________________________");
                 }
             }
             else if(choice == 7){
-                System.out.println("Enter book title to search:");
-                String bookTitle = scanner.nextLine();
-                ArrayList<Book> bookList = library.searchBookByTitle(bookTitle);
-                if(!bookList.isEmpty()){
+                System.out.println("Enter item title to search:");
+                String itemTitle = scanner.nextLine();
+                ArrayList<LibraryItem> itemList = library.searchItemByTitle(itemTitle);
+                if(!itemList.isEmpty()){
                     System.out.println("____________________________________________________");
-                    for(Book book : bookList){
-                        System.out.println(book);
+                    for(LibraryItem item : itemList){
+                        System.out.println(item);
                     }
                     System.out.println("____________________________________________________");
                 } else {
                     System.out.println("____________________________________________________");
-                    System.out.println("Book not found.");
+                    System.out.println("Item not found.");
                     System.out.println("____________________________________________________");
                 }
             }

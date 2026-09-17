@@ -2,23 +2,23 @@ import java.util.ArrayList;
 public class Library {
     
     //Variables
-    private ArrayList<Book> books;
+    private ArrayList<LibraryItem> items;
     private ArrayList<Member> members;
 
     //Constructor
     public Library(){
-        this.books = new ArrayList<Book>();
+        this.items = new ArrayList<LibraryItem>();
         this.members = new ArrayList<Member>();
     }
 
 
     //Methods
 
-    //Get a book by the ID
-    public Book getBookById(int id){
-        for(Book b : books){
-            if(b.getId() == id){
-                return b;
+    //Get an item by the ID
+    public LibraryItem getItemById(int id){
+        for(LibraryItem i : items){
+            if(i.getId() == id){
+                return i;
             }
         }
         return null;
@@ -35,11 +35,11 @@ public class Library {
     }
 
 
-    //Validate the Book and member
-    private boolean validateMemberAndBook(Member member, Book book){
-        //Make sure the member and book are not null
-        if(member == null || member.getName() == null || book == null || book.getTitle() == null || book.getAuthor() == null){
-            System.out.println("No part of the member or book can be empty.");
+    //Validate the item and member
+    private boolean validateMemberAndItem(Member member, LibraryItem item){
+        //Make sure the member and item are not null
+        if(member == null || member.getName() == null || item == null || item.getTitle() == null){
+            System.out.println("No part of the member or item can be empty.");
             return false;
         }
         //Make sure the member exists in the library
@@ -47,30 +47,30 @@ public class Library {
             System.out.println("This member does not exist in the database.");
             return false;
         }
-        //Make sure the book exists in the library
-        if(!books.contains(book)){
-            System.out.println("This book does not exist in the database.");
+        //Make sure the item exists in the library
+        if(!items.contains(item)){
+            System.out.println("This item does not exist in the database.");
             return false;
         }
         return true;
     }
 
-    //Add a book to the library and make sure it has a unique ID
-    public boolean addBook(Book book){
+    //Add an item to the library and make sure it has a unique ID
+    public boolean addItem(LibraryItem item){
         //Check for null values
-        if(book == null || book.getTitle() == null || book.getAuthor() == null){
-            System.out.println("No part of the book can be empty.");
+        if(item == null || item.getTitle() == null){
+            System.out.println("No part of the item can be empty.");
             return false;
         }
         //Loop to see if Id is unique
-        for(Book b : books){
-            if(b.getId() == book.getId()){
-                System.out.println("Book ID already exists. Please use a unique ID.");
+        for(LibraryItem i : items){
+            if(i.getId() == item.getId()){
+                System.out.println("Item ID already exists. Please use a unique ID.");
                 return false;
             }
         }
         //Add to the List
-        books.add(book);
+        items.add(item);
         return true;
     }
 
@@ -95,66 +95,66 @@ public class Library {
     }
 
 
-    //Check out a book to a member
-    public boolean checkOutBook(Member member, Book book){
-        //Make sure the member and book are not null
-        if(!validateMemberAndBook(member, book)){
+    //Check out an item to a member
+    public boolean checkOutItem(Member member, LibraryItem item){
+        //Make sure the member and item are not null
+        if(!validateMemberAndItem(member, item)){
             return false;
         }
-        //Check if the member has already checked out the book
-        if(member.getBorrowedBooks().contains(book)){
-            System.out.println("This member has already checked out this book.");
+        //Check if the member has already checked out the item
+        if(member.getBorrowedItems().contains(item)){
+            System.out.println("This member has already checked out this item.");
             return false;
         }
-        //Check if the book is available
-        if(!book.isAvailability()){
-            System.out.println("This book is not currently available for checkout.");
+        //Check if the item is available
+        if(!item.isAvailability()){
+            System.out.println("This item is not currently available for checkout.");
             return false;
         }
 
-        //If all pass then checkout the book
-        member.addBorrowedBook(book);
+        //If all pass then checkout the item
+        member.addBorrowedItem(item);
         return true;
     }
 
 
-    //Return book from a member
-    public boolean returnBook(Member member, Book book){
-        //Make sure the member and book are not null
-        if(!validateMemberAndBook(member, book)){
+    //Return an item from a member
+    public boolean returnItem(Member member, LibraryItem item){
+        //Make sure the member and item are not null
+        if(!validateMemberAndItem(member, item)){
             return false;
         }
-        //Check if the member has already checkoout the book
-        if(!member.getBorrowedBooks().contains(book)){
-            System.out.println("This member has not checked out this book.");
+        //Check if the member has already checked out the item
+        if(!member.getBorrowedItems().contains(item)){
+            System.out.println("This member has not checked out this item.");
             return false;
         }
 
-        //If all pass then return the book
-        member.removeBorrowedBook(book);
+        //If all pass then return the item
+        member.removeBorrowedItem(item);
         return true;
     }
 
 
-    //Remove a book from the library
-    public boolean removeBook(Book book){
-        //Make sure the book is not null
-        if(book == null || book.getTitle() == null || book.getAuthor() == null){
-            System.out.println("No part of the book can be empty.");
+    //Remove an item from the library
+    public boolean removeItem(LibraryItem item){
+        //Make sure the item is not null
+        if(item == null || item.getTitle() == null){
+            System.out.println("No part of the item can be empty.");
             return false;
         }
-        //Check if the book exists in the library
-        if(!books.contains(book)){
-            System.out.println("This book does not exist in the database.");
+        //Check if the item exists in the library
+        if(!items.contains(item)){
+            System.out.println("This item does not exist in the database.");
             return false;
         }
-        //Check if the book is currently checked out
-        if(!book.isAvailability()){
-            System.out.println("This book is currently checked out and cannot be removed.");
+        //Check if the item is currently checked out
+        if(!item.isAvailability()){
+            System.out.println("This item is currently checked out and cannot be removed.");
             return false;
         }
-        //If all pass then remove the book
-        books.remove(book);
+        //If all pass then remove the item
+        items.remove(item);
         return true;
     }
 
@@ -170,9 +170,9 @@ public class Library {
             System.out.println("This member does not exist in the database.");
             return false;
         }
-        //Check if the member has any books checked out
-        if(!member.getBorrowedBooks().isEmpty()){
-            System.out.println("This member has books checked out and cannot be removed.");
+        //Check if the member has any items checked out
+        if(!member.getBorrowedItems().isEmpty()){
+            System.out.println("This member has items checked out and cannot be removed.");
             return false;
         }
         //If all pass then remove the member
@@ -180,17 +180,17 @@ public class Library {
         return true;
     }
 
-    //Search for a book by title
-    public ArrayList<Book> searchBookByTitle(String title){
-        ArrayList<Book> result = new ArrayList<Book>();
+    //Search for an item by title
+    public ArrayList<LibraryItem> searchItemByTitle(String title){
+        ArrayList<LibraryItem> result = new ArrayList<LibraryItem>();
 
         if(title == null || title.trim().isEmpty()){
             System.out.println("Title cannot be empty.");
             return result;
         }
-        for(Book b : books){
-            if(b.getTitle().toLowerCase().contains(title.toLowerCase())){
-                result.add(b);
+        for(LibraryItem i : items){
+            if(i.getTitle().toLowerCase().contains(title.toLowerCase())){
+                result.add(i);
             }
         }
         return result;

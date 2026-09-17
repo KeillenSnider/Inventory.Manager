@@ -4,13 +4,13 @@ public class Member {
     //Variables
     private int id;
     private String name;
-    private ArrayList<Book> borrowedBooks;
+    private ArrayList<LibraryItem> items;
 
     //Constructor
     public Member(int id, String name){
         this.id = id;
         this.name = name;
-        this.borrowedBooks = new ArrayList<Book>();
+        this.items = new ArrayList<LibraryItem>();
     }
 
     //Getters
@@ -22,23 +22,23 @@ public class Member {
         return name;
     }
 
-    public ArrayList<Book> getBorrowedBooks(){
+    public ArrayList<LibraryItem> getBorrowedItems(){
         //Send a copy so the main does not get wipped
-        return new ArrayList<>(borrowedBooks);
+        return new ArrayList<>(items);
     }
 
 
     //Setters
-    public void addBorrowedBook(Book book){
-        borrowedBooks.add(book);
-        //Set the book availability to false
-        book.setAvailability(false);
+    public void addBorrowedItem(LibraryItem item){
+        items.add(item);
+        //Set the item availability to false
+        item.setAvailability(false);
     }
 
-    public void removeBorrowedBook(Book book){
-        borrowedBooks.remove(book);
-        //Set the book availability to true
-        book.setAvailability(true);
+    public void removeBorrowedItem(LibraryItem item){
+        items.remove(item);
+        //Set the item availability to true
+        item.setAvailability(true);
     }
 
     //Display member information
@@ -46,10 +46,10 @@ public class Member {
     @Override
     public String toString(){
         String result = "_______________________________" + "\n" + "Member ID: " + id + "\n" + "Member Name: " + name + "\n" 
-        + "Books checked out by Member: " + borrowedBooks.size() + "\n" + "Book Titles: " + "\n";
+        + "Items checked out by Member: " + items.size() + "\n" + "Items Titles: " + "\n";
 
-        for (Book b : borrowedBooks){
-            result += b.getTitle() + "\n";
+        for (LibraryItem i : items){
+            result += i.getTitle() + "\n";
         }
 
         result += "_______________________________";
