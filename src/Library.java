@@ -1,37 +1,22 @@
 import java.util.ArrayList;
+
 public class Library {
     
-    //Variables
-    private ArrayList<LibraryItem> items;
-    private ArrayList<Member> members;
-
-    //Constructor
-    public Library(){
-        this.items = new ArrayList<LibraryItem>();
-        this.members = new ArrayList<Member>();
-    }
-
-
     //Methods
 
     //Get an item by the ID
     public LibraryItem getItemById(int id){
-        for(LibraryItem i : items){
-            if(i.getId() == id){
-                return i;
-            }
-        }
-        return null;
+        return Database.getItemById(id);
     }
 
     //Get a member by the ID
     public Member getMemberById(int id){
-        for(Member m : members){
-            if(m.getId() == id){
-                return m;
-            }
-        }
-        return null;
+        return Database.getMemberById(id);
+    }
+
+    //Find all items that are overdue
+    public ArrayList<String> findOverdueItems(){
+        return Database.findOverdueItems();
     }
 
 
@@ -39,17 +24,23 @@ public class Library {
     private boolean validateMemberAndItem(Member member, LibraryItem item){
         //Make sure the member and item are not null
         if(member == null || member.getName() == null || item == null || item.getTitle() == null){
+            System.out.println("____________________________________________________");
             System.out.println("No part of the member or item can be empty.");
+            System.out.println("____________________________________________________");
             return false;
         }
         //Make sure the member exists in the library
-        if(!members.contains(member)){
+        if(getMemberById(member.getId()) == null){
+            System.out.println("____________________________________________________");
             System.out.println("This member does not exist in the database.");
+            System.out.println("____________________________________________________");
             return false;
         }
         //Make sure the item exists in the library
-        if(!items.contains(item)){
+        if(getItemById(item.getId()) == null){
+            System.out.println("____________________________________________________");
             System.out.println("This item does not exist in the database.");
+            System.out.println("____________________________________________________");
             return false;
         }
         return true;
@@ -59,19 +50,13 @@ public class Library {
     public boolean addItem(LibraryItem item){
         //Check for null values
         if(item == null || item.getTitle() == null){
+            System.out.println("____________________________________________________");
             System.out.println("No part of the item can be empty.");
+            System.out.println("____________________________________________________");
             return false;
         }
-        //Loop to see if Id is unique
-        for(LibraryItem i : items){
-            if(i.getId() == item.getId()){
-                System.out.println("Item ID already exists. Please use a unique ID.");
-                return false;
-            }
-        }
-        //Add to the List
-        items.add(item);
-        return true;
+        //Add to the Database
+        return Database.addItem(item);
     }
 
 
@@ -79,19 +64,14 @@ public class Library {
     public boolean addMember(Member member){
         //Check for null values
         if(member == null || member.getName() == null){
+            System.out.println("____________________________________________________");
             System.out.println("No part of the member can be empty.");
+            System.out.println("____________________________________________________");
             return false;
         }
-        //Loop to see if Id is unique
-        for(Member m : members){
-            if(m.getId() == member.getId()){
-                System.out.println("Member ID already exists. Please use a unique ID.");
-                return false;
-            }
-        }
-        //Add to the List
-        members.add(member);
-        return true;
+        
+        //Add to the database
+        return Database.addMember(member);
     }
 
 
@@ -101,20 +81,16 @@ public class Library {
         if(!validateMemberAndItem(member, item)){
             return false;
         }
-        //Check if the member has already checked out the item
-        if(member.getBorrowedItems().contains(item)){
-            System.out.println("This member has already checked out this item.");
-            return false;
-        }
         //Check if the item is available
-        if(!item.isAvailability()){
+        if(!item.isAvailable()){
+            System.out.println("____________________________________________________");
             System.out.println("This item is not currently available for checkout.");
+            System.out.println("____________________________________________________");
             return false;
         }
 
         //If all pass then checkout the item
-        member.addBorrowedItem(item);
-        return true;
+        return Database.checkoutItem(member.getId(), item.getId());
     }
 
 
@@ -124,15 +100,9 @@ public class Library {
         if(!validateMemberAndItem(member, item)){
             return false;
         }
-        //Check if the member has already checked out the item
-        if(!member.getBorrowedItems().contains(item)){
-            System.out.println("This member has not checked out this item.");
-            return false;
-        }
 
         //If all pass then return the item
-        member.removeBorrowedItem(item);
-        return true;
+        return Database.returnItem(member.getId(), item.getId());
     }
 
 
@@ -140,44 +110,54 @@ public class Library {
     public boolean removeItem(LibraryItem item){
         //Make sure the item is not null
         if(item == null || item.getTitle() == null){
+            System.out.println("____________________________________________________");
             System.out.println("No part of the item can be empty.");
+            System.out.println("____________________________________________________");
             return false;
         }
         //Check if the item exists in the library
-        if(!items.contains(item)){
+        if(Database.getItemById(item.getId()) == null){
+            System.out.println("____________________________________________________");
             System.out.println("This item does not exist in the database.");
+            System.out.println("____________________________________________________");
             return false;
         }
         //Check if the item is currently checked out
-        if(!item.isAvailability()){
+        if(!item.isAvailable()){
+            System.out.println("____________________________________________________");
             System.out.println("This item is currently checked out and cannot be removed.");
+            System.out.println("____________________________________________________");
             return false;
         }
         //If all pass then remove the item
-        items.remove(item);
-        return true;
+        return Database.removeItem(item);
     }
 
     //Remove a member from the library
     public boolean removeMember(Member member){
         //Make sure the member is not null
         if(member == null || member.getName() == null){
+            System.out.println("____________________________________________________");
             System.out.println("No part of the member can be empty.");
+            System.out.println("____________________________________________________");
             return false;
         }
         //Check if the member exists in the library
-        if(!members.contains(member)){
+        if(Database.getMemberById(member.getId()) == null){
+            System.out.println("____________________________________________________");
             System.out.println("This member does not exist in the database.");
+            System.out.println("____________________________________________________");
             return false;
         }
         //Check if the member has any items checked out
-        if(!member.getBorrowedItems().isEmpty()){
+        if(Database.hasCheckedOutItems(member.getId())){
+            System.out.println("____________________________________________________");
             System.out.println("This member has items checked out and cannot be removed.");
+            System.out.println("____________________________________________________");
             return false;
         }
         //If all pass then remove the member
-        members.remove(member);
-        return true;
+        return Database.removeMember(member);
     }
 
     //Search for an item by title
@@ -185,14 +165,12 @@ public class Library {
         ArrayList<LibraryItem> result = new ArrayList<LibraryItem>();
 
         if(title == null || title.trim().isEmpty()){
+            System.out.println("____________________________________________________");
             System.out.println("Title cannot be empty.");
+            System.out.println("____________________________________________________");
             return result;
         }
-        for(LibraryItem i : items){
-            if(i.getTitle().toLowerCase().contains(title.toLowerCase())){
-                result.add(i);
-            }
-        }
-        return result;
+        //Search the database for items with the title
+        return Database.searchItemsByTitle(title);
     }
 }

@@ -17,6 +17,9 @@ public class Main {
 
     public static void main(String[] args){
 
+        // Call the method to create tables when the program starts
+        Database.createTables(); 
+
         Scanner scanner = new Scanner(System.in);
         Library library = new Library();
 
@@ -29,7 +32,8 @@ public class Main {
             System.out.println("5. Checkout an item");
             System.out.println("6. Return an item");
             System.out.println("7. Search for an item");
-            System.out.println("8. Exit");
+            System.out.println("8. Show Overdue items");
+            System.out.println("9. Exit");
 
             int choice = getValidInt(scanner);
             // Make sure to clear the scanner buffer after reading an int
@@ -77,7 +81,7 @@ public class Main {
                 if(item != null){
                     if(library.removeItem(item)){
                         System.out.println("____________________________________________________");
-                        System.out.println(item + " removed from Library.");
+                        System.out.println("removed" + item + " from Library.");
                         System.out.println("____________________________________________________");
                     }
                 } else {
@@ -107,7 +111,7 @@ public class Main {
                 if(member != null){
                     if(library.removeMember(member)){
                         System.out.println("____________________________________________________");
-                        System.out.println(member.getName() + " Member removed from Library.");
+                        System.out.println("Member " + member.getName() + " removed from Library.");
                         System.out.println("____________________________________________________");
                     }
                 } else {
@@ -175,6 +179,18 @@ public class Main {
                 }
             }
             else if(choice == 8){
+                ArrayList<String> overdue = library.findOverdueItems();
+                System.out.println("____________________________________________________");
+                if(overdue.isEmpty()){
+                    System.out.println("No items are currently overdue.");
+                } else {
+                    for(String line : overdue){
+                        System.out.println(line);
+                    }
+                }
+                System.out.println("____________________________________________________");
+            }
+            else if(choice == 9){
                 System.out.println("____________________________________________________");
                 System.out.println("Exiting the system. Goodbye!");
                 break;
@@ -185,5 +201,5 @@ public class Main {
                 System.out.println("____________________________________________________");
             }
         }
-    }
+    } 
 }

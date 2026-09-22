@@ -21,6 +21,6 @@ public class Book extends LibraryItem{
     @Override
     public String toString(){
         return "_______________________________" + "\n" +"Book ID: " + getId() + "\n" + "Book Title: " + getTitle() + "\n" + "Book Author: " + author + "\n" + 
-        "Book Availability: " + isAvailability() + "\n" + "Book Loan Period: " + getLoanPeriodDays() + " days\n" + "_______________________________";
+        "Book Availability: " + isAvailable() + "\n" + "Book Loan Period: " + getLoanPeriodDays() + " days\n" + "_______________________________";
     }
 }

@@ -19,13 +19,8 @@ public abstract class LibraryItem {
         return title;
     }
 
-    public boolean isAvailability(){
+    public boolean isAvailable(){
         return availability;
-    }
-
-    //Setters
-    public void setAvailability(boolean availability){
-        this.availability = availability;
     }
 
     public int getLoanPeriodDays(){

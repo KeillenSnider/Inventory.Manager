@@ -19,6 +19,6 @@ public class DVD extends LibraryItem {
     @Override
     public String toString(){
         return "_______________________________" + "\n" +"DVD ID: " + getId() + "\n" + "DVD Title: " + getTitle() + "\n" + "DVD Director: " + director + "\n" +
-        "DVD Availability: " + isAvailability() + "\n" + "DVD Loan Period: " + getLoanPeriodDays() + " days\n" + "_______________________________";
+        "DVD Availability: " + isAvailable() + "\n" + "DVD Loan Period: " + getLoanPeriodDays() + " days\n" + "_______________________________";
     }
 }
